@@ -1,0 +1,33 @@
+import requests
+import pandas as pd
+
+df = pd.read_excel("/Users/apple/Downloads/stock_ticker.xlsx")
+
+ticker = df["symbol_names"].tolist()
+
+def weird_division(n, d):
+    return n / d if d else 0
+
+headers = {
+    'Accept':'*/*',
+    'Accept-Encoding':'gzip, deflate, br',
+    'Accept-Language':'en-GB,en-US;q=0.9,en;q=0.8',
+    'Cookie': 'defaultLang=en; _gid=GA1.2.1189146354.1698491845; _ga=GA1.1.447891677.1697081903; nsit=CweUuT9TVMV_72PN4le-RMou; AKA_A2=A; bm_mi=8E51D8DCC1F317D324BC98F86833DF0A~YAAQHZUvF9xttWqLAQAASFMxdxUSS1SCntjVnq/nbDksLbvwGLXd9phayRS/KEjY2nSHhKu5UBdNmYbq7GRpEonZhK/rHkgjs725KESXPTKjVlUkcH71HkpUnNL5cRvhRfrcbVMHMYczsFwfVFDhAGC4h7M7fsMVlS65XqCVu14+AXBl7NXHHYkMw8auRgoR2OSZ0x8M+PbnBuf+VKiqbrzr6IEYAis+PMY58QTrIxKhn8VwWnvnRXX1kdX+wxuFt5nYay9GkGNr4jT2plGoJrUQ/tlbYMHjle47zpIFxkyOL3U8Elu6tTkJ3NQXa8E9i2xOv7O56fF0I6KarcZBxE0=~1; ak_bmsc=C17BF6BC56482ED19E3ADCE6E97DCEA8~000000000000000000000000000000~YAAQHZUvF/httWqLAQAAxVgxdxUPIK7LVpK4blJ7p7tPZVN1Li+ape5jBJ4KJzBbnqNbATvdTVk6vrGlP8lPiWmbeBx5hAbFnFl0i3eBmXZwS8UoDJ9naMJKby7f+vuAvzBMODYO4NznlidJ6zMV+/pF7X2vSFj3esXgfu1IDqZ4h8HbU2FFrD7Z8IG4JSel39EK5O7EbRvgpiMm2sTGIjuIYA4q7Gs08ntEGCD0Cng9O0DvtaDAnaPFpEjhbuprAuM1OS2jdKDnUQ80RCeXzfG21e39UdocY5pPSPho6vGHDE2kpjJCmzWQTQ50tOQe5ALpnUQku8sk7inkNsJmTZ1jxex+6TSd/PWEeyEYMGPl3IUF7SSt4ghIXU2XA7PL2Oi2V47voAQQeGDmyknDzfqj6Be2A2sS6JVdEcIG1RzpOtYAvcSmf5C1Q5ssmDx6X/4j2LgtSc/dKFzCS/MnoPtcYUqzCc2B05N7wiNVpsfDNULsNxEyhXQqWgPAkft5HioKQ7Nbol/9bDtq/ZDLtIRUN86RAHF88f6OuE05xjNF6UlAm+k=; nseQuoteSymbols=[{"symbol":"BLUECHIP","identifier":null,"type":"equity"},{"symbol":"AEROFLEX","identifier":null,"type":"equity"},{"symbol":"SBIN","identifier":null,"type":"equity"},{"symbol":"20MICRONS","identifier":null,"type":"equity"},{"symbol":"RELIANCE","identifier":null,"type":"equity"}]; nseappid=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhcGkubnNlIiwiYXVkIjoiYXBpLm5zZSIsImlhdCI6MTY5ODUxMzU5NiwiZXhwIjoxNjk4NTIwNzk2fQ.xf3--BEWv46wPmWmJDBljAs8POIVBmnxfy6PmfvtxRs; RT="z=1&dm=nseindia.com&si=b8439ca3-8e8b-4fb4-a955-6b39f9e8252e&ss=loaayryl&sl=3&se=8c&tt=2ub&bcn=%2F%2F684d0d43.akstat.io%2F"; bm_sv=E59608F0F9CE4B715E4BE098EEC0925D~YAAQHZUvF+KytWqLAQAA5rRMdxVYnWQDd1FKyvxU5xEuN13qlMbc1+U2j/BJkvne7PAiZQEMLNsmlrMu2+6SZ6IArW/cnYqRTtJPcgIfRisAGqyoZDP58Pzxv9dB9R/SBn8UwgrFHUlv4z8B8YS8zYxxrDJxKDyjr6hnCCPK0iNcN3KO0YPMe0DKvr5DotFoXTP3S/Te5EYbtxnnoKiJV1HuWmIdbeIx/0L2Ccd5ZO1udTGX/elhC01R2/hIWYgLNaW4~1; _ga_PJSKY6CFJH=GS1.1.1698511803.15.1.1698513597.59.0.0',
+    #add user agent below
+    'User-Agent': ' ',
+          }
+
+print('calculations begin')
+for symbol_names in ticker :
+    if symbol_names == "balajithegreat": 
+        break
+    response = requests.get(url="https://www.nseindia.com/api/quote-equity?symbol="+symbol_names+"&section=trade_info", headers=headers)
+    buy_quantity = response.json()['marketDeptOrderBook']['totalBuyQuantity']
+    sell_quantity = response.json()['marketDeptOrderBook']['totalSellQuantity']
+    trade_volume =response.json()['marketDeptOrderBook']['tradeInfo']['totalTradedVolume']
+    if weird_division(buy_quantity,trade_volume)*100 > 20:
+        print("Ticker", symbol_names)
+        print("Buy", buy_quantity)
+        print("Sell", sell_quantity)
+        print("trade_volume", trade_volume)
+print('done')
