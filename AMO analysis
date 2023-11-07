@@ -1,6 +1,10 @@
+%%time
+
 import requests
 import pandas as pd
 import time
+from datetime import datetime
+
 
 
 df = pd.read_excel("/Users/apple/Downloads/stock_ticker.xlsx")
@@ -16,10 +20,9 @@ headers = {
     'Accept':'*/*',
     'Accept-Encoding':'gzip, deflate, br',
     'Accept-Language':'en-GB,en-US;q=0.9,en;q=0.8',
-    'Cookie': 'defaultLang=en; _gid=GA1.2.1189146354.1698491845; nseQuoteSymbols=[{"symbol":"DEEPENR","identifier":null,"type":"equity"},{"symbol":"NIPPOBATRY","identifier":null,"type":"equity"},{"symbol":"MUTHOOTFIN","identifier":null,"type":"equity"},{"symbol":"SBIN","identifier":null,"type":"equity"},{"symbol":"TATAMOTORS","identifier":null,"type":"equity"}]; nsit=ssZRy4oKsZ7FIc2az4DW6a-_; AKA_A2=A; ak_bmsc=B97DF28BF52EB5C31D0D5B4EDC5F811D~000000000000000000000000000000~YAAQBNcLF7G+4WuLAQAAx79qeRVV5fWppiCidoJrmcf3GrxRbaY9HjovBk0B65v5nXWv8foo7kkfHl3NmHpIs9eUi8aXTv/M3v8on5whelzh8F+IWzHZLM3AI75Bx6toi8DyjXrzhUU5cpKFBWf60vXx9mJxSvkEtaEAgZWN8hUb3nbqWXB+NURgiUK3V9XWikgDZWEFCy9L1CYj/gfU7YsLrzz85/LWeIpqIxWugMK66glAfI9yaEP3VhmFyVaG+BGS3nElcS5nCaW6FWgpm7gtTQM0pPc/XEwYxShxb1r+cVcKHQ9jd+P1KfP2euMm5GR/HYIwEYC1cabRNaP+2P+7HXv2L57i3/aod/onTHrNLxwUw/x7hAe67GOTFgG2zUL7k+i3irr+40duGMU6M70l9G2QKvmrY8PFE5GXSAKNP/vAtcF4dR0HPWUH2SRYd5sXl0y4tYjqQkmroVcBN7T28wm3xqcXJv3gmtwlu+mb0ppjkkc2Xt2wcwgNbzdi/mhi; _gat_UA-143761337-1=1; nseappid=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhcGkubnNlIiwiYXVkIjoiYXBpLm5zZSIsImlhdCI6MTY5ODU0OTEyMywiZXhwIjoxNjk4NTU2MzIzfQ.h19FYyhFKoMlp87b-zJ_z_-eHWm_LUXsyn7qK21tLfs; RT="z=1&dm=nseindia.com&si=b8439ca3-8e8b-4fb4-a955-6b39f9e8252e&ss=loawag0c&sl=1&se=8c&tt=1by&bcn=%2F%2F684d0d4a.akstat.io%2F"; bm_sv=003BE118576751D92B9CB1A932B27D98~YAAQBNcLF8G+4WuLAQAAeM1qeRWs+RgyTYZeGvDm0DRyMTD0Poy09lSIP3IDDqoVuyCkc4m7JKGupJvLPe7voHq3YoYVznPxbzDOW9wTg6UQ4NVPBvuHIkZPljOrLa87SDesgXNPlHhRflv8rcS43G1gC2zmr3pVNyIqNbqjO5t+LhGCsti6HSDTN8cxdDJbn5Eg/a0Di/xn0+DPr5ET9CHLjs1HTLMkfbIbGJkJ9SeomC1xyLU5YM924PFHsy7UwRk=~1; _ga_PJSKY6CFJH=GS1.1.1698549119.17.1.1698549124.55.0.0; _ga=GA1.1.447891677.1697081903',
+    'Cookie': '_ga=GA1.1.447891677.1697081903; defaultLang=en; nsit=WZxTmqtwVuiB0FF1wCtMlnV7; AKA_A2=A; ak_bmsc=90D2DFC846150D2E88F8B30AE4C77F92~000000000000000000000000000000~YAAQHZUvF9F+spGLAQAA4v+2pRX/S8ZATRKTjD4qTC7yMLxPlDemFw8fyCkoVXnVP78EhlMFgtEqOuBlL20klHzfzFLGvSV/BDfqNNW8HN+iWW85VAAK5856EXP7aNS1EUgXRNv1eOnx4KDc3WnJ6pJD7B96ONr8Z8jaqUbkp9GSmtZzzNihd2N6GARMSzRDTlcMPyIalhOwpdLr5gLFBubeqrqhYJ1FJ762LriEm+DKr72FEWH1y5injjMaZmxJMYidrD6AHfPlqRCmnfBsdTfE3LdmpF2/ioC4xaT5cjY15zpelgPi6p/881582fv50GkOtZ6Ien+EFq39fYlbEy/XJvJvxbewDoKJ9ir8seZ1WedvQ4BAY49V/J6hJHboib2CAupHSg2HVNSRiYYU4qNGHPvIlb4RdDJYqEmAm1i6ZLnJHahp2MceN4tOx4hWX5SyMB8N/4tXq5Yo0cdH4n5MAopRImEttlEdYbRfr4nBAhMOsn/wSDY9fDnWQRZrVg==; nseQuoteSymbols=[{"symbol":"RELIANCE","identifier":null,"type":"equity"}]; nseappid=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhcGkubnNlIiwiYXVkIjoiYXBpLm5zZSIsImlhdCI6MTY5OTI5MjMyOSwiZXhwIjoxNjk5Mjk5NTI5fQ._7wiRErSildb0QrjhocmMmJeetKfSrSKEhSK-m6EK2Q; RT="z=1&dm=nseindia.com&si=b8439ca3-8e8b-4fb4-a955-6b39f9e8252e&ss=lon6rono&sl=2&se=8c&tt=2tw&bcn=%2F%2F684d0d46.akstat.io%2F"; bm_sv=8D928DAF824D196769E324FFDAC1EE3A~YAAQHZUvF1qAspGLAQAADjm3pRWA5e/m7KCZZCpAXzoNbd8/mVSoqDIErS3KOVL8UbSHcIrug84aL2JVOrjQmtlX/WC4fddOzrFc5/6fj3ngqjCMT3PpamuN7l1GBEJo7EWirX020YuyWRkQOEsRgbYYKeYZaOyN450C21mgirObM+K7Ui6AnQB+IGqv9AmFz9IMhfn5+ilbON1m6K4XVE+rReqNo+kDIZ9NTcp/U4qOq/gbl2Km7i5KVcycDjxk1pvs~1; _ga_PJSKY6CFJH=GS1.1.1699292315.32.1.1699292330.45.0.0',
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36',
           }
-
 
 print('calculations begin')
 process_start_time = time.time()  #change the cookie
@@ -33,19 +36,22 @@ for symbol_names in ticker :
     sell_quantity = response.json()['marketDeptOrderBook']['totalSellQuantity']
     trade_volume =response.json()['marketDeptOrderBook']['tradeInfo']['totalTradedVolume']
     delivery_percentage =response.json()['securityWiseDP']['deliveryToTradedQuantity']
-    process_end_time = time.time()
-    print(process_end_time)
+    marketcap =response.json()['marketDeptOrderBook']['tradeInfo']['totalMarketCap']
+    print(symbol_names)
     #if weird_division(buy_quantity,trade_volume)*100 > 20:
     results.append({
             'symbol_names': symbol_names,
             'buy_quantity': buy_quantity,
             'sell_quantity': sell_quantity,
             'trade_volume': trade_volume,
-            'delivery_percentage': delivery_percentage
+            'delivery_percentage': delivery_percentage,
+            'marketcap' : marketcap
     })
 result_df = pd.DataFrame(results)
 print(result_df)
 process_end_time = time.time()
-
-result_df.to_csv('/Users/apple/Downloads/stock_data.csv', index=False)
-
+print(process_end_time)
+current_datetime = datetime.now()
+date_time_str = current_datetime.strftime("%Y%m%d_%H-%M-%S")
+file_name = f'/Users/apple/Downloads/stock_data_{date_time_str}.csv'
+result_df.to_csv(file_name, index=False)
